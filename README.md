@@ -1,4 +1,6 @@
 # diablo4scraper
-Scraper for Diablo4 builds
+API for scraping Diablo4 builds from maxroll.gg and d4builds
 
-node app.js
+To be used with https://github.com/jeydo/diablo4LootFilterProfileBuilder
+
+`node app.js`
