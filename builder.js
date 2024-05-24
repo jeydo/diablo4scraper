@@ -18,7 +18,8 @@ class Builder {
         	itemType : [itemType.toLowerCase().replace(/([0-9]h|[0-9])/g, '').trim()],
         	minPower : 725,
         	affixPools : this.setItemAffixes(affixes),
-        	minAffixCount : 2
+        	minAffixCount : 2,
+        	minGreaterAffixCount : null
     	};
     	return item;
 	}
