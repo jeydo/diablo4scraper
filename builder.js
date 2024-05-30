@@ -16,7 +16,7 @@ class Builder {
 			id: Math.random() * 100000,
         	name : name,
         	itemType : [itemType.toLowerCase().replace(/([0-9]h|[0-9])/g, '').trim()],
-        	minPower : 725,
+        	minPower : 925,
         	affixPools : this.setItemAffixes(affixes),
         	minAffixCount : 2,
         	minGreaterAffixCount : null
