@@ -48,7 +48,7 @@ class Builder {
 			id : Math.random() * 100000,
 			unique: unique.toLowerCase().replace(/ /g, '_').replace(/'/g, ''),
 	        value: '',
-	        minPower : 725,
+	        minPower : 925,
 	        affixPools: []
 		};
 	}
