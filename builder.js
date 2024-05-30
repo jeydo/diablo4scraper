@@ -15,7 +15,7 @@ class Builder {
 		const item = {
 			id: Math.random() * 100000,
         	name : name,
-        	itemType : [itemType.toLowerCase().replace(/([0-9]h|[0-9])/g, '').trim()],
+        	itemType : itemType.toLowerCase().replace(/^([0-9]h?)/g, '').trim().split(','),
         	minPower : 925,
         	affixPools : this.setItemAffixes(affixes),
         	minAffixCount : 2,

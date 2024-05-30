@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer')
+const itemTypeMatcher = require('./itemtype.js')
 
 const scrapeMaxroll = async(url) => {
 	const browser = await puppeteer.launch({
@@ -69,7 +70,10 @@ const scrapeD4builds = async(url) => {
 	await page.waitForSelector('.builder__gear__icon');
 	const title = await page.$eval('input.builder__header__input', ({ value }) => value)
 
-	
+	const charClass = await page.$eval('.builder__header__icon', el => el.getAttribute('alt').replace('Diablo 4 ', ''))
+	console.log(charClass)
+	console.log(title)
+
 	const data = {
 		name : title,
 		affixes : [],
@@ -81,6 +85,8 @@ const scrapeD4builds = async(url) => {
 		
 		let itemType = await elementItemType.evaluate(el => el.textContent)
 
+		if (itemType == 'Empty') continue
+
 		const imgHover = await slot.$('.builder__gear__icon')
 		if (!imgHover) continue
 		await imgHover.hover()
@@ -91,7 +97,7 @@ const scrapeD4builds = async(url) => {
 			if (implicit) {
 				const itemType = implicit.textContent
 				if (itemType.indexOf(':') !== -1) {
-					data.itemType = itemType.replace(/:.*/g, '')
+					data.itemType = itemType.replace(/:.*/g, '') 
 				}
 			}
 
@@ -101,7 +107,7 @@ const scrapeD4builds = async(url) => {
 				return data
 			}
 
-			data.affixes = [...document.querySelectorAll('.codex__tooltip__stats:not(.codex__tooltip__stats--tempering) .codex__tooltip__stat:not(.implicit)')].map(node => node.textContent);
+			data.affixes = [...document.querySelectorAll('.codex__tooltip__stats:not(.codex__tooltip__stats--tempering) .codex__tooltip__stat:not(.implicit)')].map(node => node.textContent.replace('Max Life', 'Maximum Life'));
 			return data
 		})
 		
@@ -109,8 +115,9 @@ const scrapeD4builds = async(url) => {
 			data.uniques.push(itemData.unique)
 			continue
 		}
+		const currentItemType = itemData.itemType ?? itemType
 		data.affixes.push({
-			itemType : itemData.itemType ? itemData.itemType : itemType,
+			itemType : itemTypeMatcher.d4builds.weapon[currentItemType] ?? (itemTypeMatcher.d4builds[charClass][currentItemType] ?? currentItemType),
 			affixes : itemData.affixes
 		})
 	}

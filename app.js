@@ -18,6 +18,7 @@ app.post('/scrapebuild', (req, res) => {
     const execRx = rx.exec(url)
     const scraperFn = 'scrape' + execRx[1].charAt(0).toUpperCase() + execRx[1].slice(1)
     console.log(scraperFn)
+    console.log(url)
     new Promise((resolve, reject) => {
         scraper[scraperFn](url).then(data => {
             const build = new builder(data.name);
