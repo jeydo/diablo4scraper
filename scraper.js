@@ -48,6 +48,7 @@ const scrapeMaxroll = async(url) => {
 		return data;
 		
 	})
+	console.log(data.name)
 	await browser.close();
 	return data;
 }
@@ -117,7 +118,7 @@ const scrapeD4builds = async(url) => {
 		}
 		const currentItemType = itemData.itemType ?? itemType
 		data.affixes.push({
-			itemType : itemTypeMatcher.d4builds.weapon[currentItemType] ?? (itemTypeMatcher.d4builds[charClass][currentItemType] ?? currentItemType),
+			itemType : itemTypeMatcher.matcherFn(currentItemType, charClass, itemTypeMatcher.d4builds),//itemTypeMatcher.d4builds.weapon[currentItemType] ?? (itemTypeMatcher.d4builds[charClass][currentItemType] ?? currentItemType),
 			affixes : itemData.affixes
 		})
 	}
@@ -126,6 +127,81 @@ const scrapeD4builds = async(url) => {
 	return data;
 }
 
+const scrapeMobalytics = async(url) => {
+	const browser = await puppeteer.launch({
+	    headless: true
+	});
+
+	const page = await browser.newPage();
+	await page.goto(url);
+	const buttonPrivacy = await page.waitForSelector('.qc-cmp2-summary-buttons button:last-child')
+	await buttonPrivacy.evaluate(b => b.click());
+	
+	const gearStats = await page.waitForSelector('::-p-xpath(//div[contains(text(), "Gear Stats")])')
+	await gearStats.click()
+	
+	const data = {
+		name : '',
+		affixes : [],
+		uniques : []
+	};
+	
+	data.name = await page.$eval('title', el => el.textContent.replace(/ - Diablo 4 .* Build Guide/, ''))
+
+	const charClass = await page.$eval('.m-a53mf3', el => el.textContent.replace(/(Diablo 4 | Build)/g, ''))
+	
+	console.log(data.name)
+	console.log(charClass)
+
+	const dataBuilt = await page.evaluate(() => {
+		const data = { affixes : [], uniques : [] }
+		const slots = document.querySelectorAll('.m-4tf4x5 .m-vg1xh6')
+		for (const slot of slots) {
+			const item = { itemType : null, affixes : [] }
+			item.itemType = slot.querySelector('.m-1vrrnd3').textContent
+
+			let affixes = [...slot.querySelectorAll('.m-9l2af6 li.m-qodgh2')]
+
+			//check if it's a unique
+			const aspect = slot.querySelector('.m-ndz0o2').textContent
+			if (!aspect.includes('Aspect') && aspect !== 'Empty') {
+				data.uniques.push(aspect)
+				continue
+			}
+
+			if (affixes.length <= 0) continue
+			affixes = affixes.filter(el => {
+				const img = el.querySelector('img')
+				return img && !img.src.includes('Tempreing.svg')
+			})
+			//.filter(el => !el.textContent.includes('Implicit'))
+			.map(el => el.textContent)
+			
+			if (affixes[0].includes('Implicit')) {
+				if (affixes[0].includes(':')) {
+					item.itemType = affixes[0].replace(/:.*/g, '')
+				}	
+				affixes = affixes.slice(1)
+			}
+			item.affixes = affixes
+
+			data.affixes.push(item)
+		}
+
+		return data;
+	});
+
+	data.affixes = dataBuilt.affixes.map(el => {
+		el.itemType = itemTypeMatcher.matcherFn(el.itemType, charClass, itemTypeMatcher.mobalytics)
+		return el
+	})
+	data.uniques = dataBuilt.uniques
+	
+	await browser.close();
+	return data;
+}
+
 module.exports.scrapeMaxroll = scrapeMaxroll;
 module.exports.scrapeD4builds = scrapeD4builds;
+module.exports.scrapeMobalytics = scrapeMobalytics;
 
