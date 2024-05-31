@@ -134,8 +134,8 @@ const scrapeMobalytics = async(url) => {
 
 	const page = await browser.newPage();
 	await page.goto(url);
-	const buttonPrivacy = await page.waitForSelector('.qc-cmp2-summary-buttons button:last-child')
-	await buttonPrivacy.evaluate(b => b.click());
+	//const buttonPrivacy = await page.waitForSelector('.qc-cmp2-summary-buttons button:last-child')
+	//await buttonPrivacy.evaluate(b => b.click());
 	
 	const gearStats = await page.waitForSelector('::-p-xpath(//div[contains(text(), "Gear Stats")])')
 	await gearStats.click()
