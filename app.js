@@ -17,7 +17,8 @@ app.post('/scrapebuild', (req, res) => {
     const url = req.body.url;
     if (!url.startsWith('https://maxroll.gg/d4/planner/') &&
         !url.startsWith('https://d4builds.gg/builds/') &&
-        !url.startsWith('https://mobalytics.gg/diablo-4/builds/')
+        !url.startsWith('https://mobalytics.gg/diablo-4/builds/') &&
+        !url.startsWith('https://mobalytics.gg/diablo-4/profile/')
     ) {
         console.error('URL Failed : ' + url)
         return res.status(500).json({
