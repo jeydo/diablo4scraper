@@ -46,7 +46,7 @@ class Builder {
 	setNewUnique(unique) {
 		return {
 			id : Math.random() * 100000,
-			unique: unique.toLowerCase().replace(/ /g, '_').replace(/'/g, ''),
+			unique: unique.toLowerCase().replace(/[ ]{1,}/g, '_').replace(/'/g, ''),
 	        value: '',
 	        minPower : 925,
 	        affixPools: []
@@ -69,8 +69,8 @@ class Builder {
 	}
 
 	cleanText(text) {
-		return text.replace(/[0-9,\.\[\]%+-]/g, '').toLowerCase()
-			.replace(/^ranks to/, 'to').trim().replace(/ /g, '_');
+		return text.replace(/[0-9,\.\[\]%+:\-]/g, '').toLowerCase()
+			.replace(/^ranks to/, 'to').trim().replace(/[ ]{1,}/g, '_');
 	}
 }
 
