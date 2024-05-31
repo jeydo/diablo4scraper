@@ -69,8 +69,12 @@ class Builder {
 	}
 
 	cleanText(text) {
-		return text.replace(/[0-9,\.\[\]%+:\-]/g, '').toLowerCase()
-			.replace(/^ranks to/, 'to').trim().replace(/[ ]{1,}/g, '_');
+		return text
+			.replace(/[0-9,\.\[\]%+:\-]/g, '')
+			.toLowerCase()
+			.replace(/^ranks to/, 'to')
+			.replace(/^lucky hit chance to/i, 'lucky hit up to a chance to')
+			.trim().replace(/[ ]{1,}/g, '_');
 	}
 }
 

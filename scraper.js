@@ -129,7 +129,7 @@ const scrapeD4builds = async(url) => {
 
 const scrapeMobalytics = async(url) => {
 	const browser = await puppeteer.launch({
-	    headless: false
+	    headless: true
 	});
 
 	const page = await browser.newPage();
@@ -150,7 +150,7 @@ const scrapeMobalytics = async(url) => {
 
 	const charClass = await page.$eval('.m-a53mf3', el => el.textContent.replace(/(Diablo 4 | Build)/g, ''))
 	
-	console.log(data.title)
+	console.log(data.name)
 	console.log(charClass)
 
 	const dataBuilt = await page.evaluate(() => {
@@ -197,7 +197,7 @@ const scrapeMobalytics = async(url) => {
 	})
 	data.uniques = dataBuilt.uniques
 	
-	//await browser.close();
+	await browser.close();
 	return data;
 }
 
