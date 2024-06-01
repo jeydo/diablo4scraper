@@ -158,13 +158,15 @@ const scrapeMobalytics = async(url) => {
 		const slots = document.querySelectorAll('.m-4tf4x5 .m-vg1xh6')
 		for (const slot of slots) {
 			const item = { itemType : null, affixes : [] }
+
 			item.itemType = slot.querySelector('.m-1vrrnd3').textContent
 
 			let affixes = [...slot.querySelectorAll('.m-9l2af6 li.m-qodgh2')]
 
 			//check if it's a unique
-			const aspect = slot.querySelector('.m-ndz0o2').textContent
-			if (!aspect.includes('Aspect') && aspect !== 'Empty') {
+			const aspect = slot.querySelector('.m-ndz0o2')?.textContent
+
+			if (aspect && !aspect.includes('Aspect')) {
 				data.uniques.push(aspect)
 				continue
 			}
