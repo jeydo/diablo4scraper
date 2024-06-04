@@ -10,9 +10,13 @@ const scrapeMaxroll = async(url) => {
 
 	await page.goto(url);
 
-	const cookiesPopup = await page.waitForSelector('.ncmp__btn:last-child');
-	await cookiesPopup.click();
-	await new Promise(r => setTimeout(r, 200));
+	try {
+		const cookiesPopup = await page.waitForSelector('.ncmp__btn:last-child');
+		await cookiesPopup.click();
+	} catch (e) {
+		console.log('No cookies popup')
+	}
+	//await new Promise(r => setTimeout(r, 200));
 
 	const data = await page.evaluate(async() => {
 		let data = {
