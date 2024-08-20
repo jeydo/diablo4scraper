@@ -11,12 +11,12 @@ const scrapeMaxroll = async(url) => {
 	await page.goto(url);
 
 	try {
-		const cookiesPopup = await page.waitForSelector('.ncmp__btn:last-child');
+		const cookiesPopup = await page.waitForSelector('.ncmp__btn:last-child', { timeout: 2000 });
 		await cookiesPopup.click();
+		await new Promise(r => setTimeout(r, 200));
 	} catch (e) {
 		console.log('No cookies popup')
 	}
-	//await new Promise(r => setTimeout(r, 200));
 
 	const data = await page.evaluate(async() => {
 		let data = {
@@ -24,23 +24,23 @@ const scrapeMaxroll = async(url) => {
 			affixes : [],
 			uniques : []
 		};
-		const slots = document.querySelectorAll('.d4t-PlannerPaperdoll .d4t-slot');
+
+		const slots = document.querySelectorAll('.d4t-ItemList .d4t-item');
+
 		for (const slot of slots) {
-				await slot.click();
-				let activeItem = document.querySelector('.d4t-item-list .d4t-active');
-				if (activeItem == null) {
+
+				let itemType = slot.querySelector('.d4t-sub-title').textContent;
+				console.log(itemType);
+				if (itemType.includes('Unique') || itemType.includes('Mythic')) {
+					data.uniques.push(slot.querySelector('.d4t-title').textContent);
 					continue;
 				}
-				if (document.querySelector('.d4t-item-options').textContent.startsWith('Unique')) {
-					data.uniques.push(document.querySelector('.d4t-header-title').textContent);
-					continue;
-				}
-				const itemType = activeItem.closest('.d4t-expanded').querySelector('.d4t-category-header').textContent;
-							
+
+				itemType = itemType.replace('Ancestral Legendary ', '');
+
 				const obj = { itemType : itemType, affixes : [] };
 				
-				const affixesContainer = document.querySelector('.d4t-affix-category:not(.d4t-category-implicit)');
-				const affixes = affixesContainer.querySelectorAll('.d4t-property');
+				const affixes = slot.querySelectorAll('.d4t-list-affix, .d4t-list-greater');
 				for (const affix of affixes) {
 					obj.affixes.push(
 						affix.textContent
@@ -50,7 +50,6 @@ const scrapeMaxroll = async(url) => {
 
 		}
 		return data;
-		
 	})
 	console.log(data.name)
 	await browser.close();
