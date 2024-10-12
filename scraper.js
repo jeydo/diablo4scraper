@@ -11,7 +11,7 @@ const scrapeMaxroll = async(url) => {
 	await page.goto(url);
 
 	try {
-		const cookiesPopup = await page.waitForSelector('.ncmp__btn:last-child', { timeout: 2000 });
+		const cookiesPopup = await page.waitForSelector('.ncmp__btn:last-child', { timeout: 5000 });
 		await cookiesPopup.click();
 		await new Promise(r => setTimeout(r, 200));
 	} catch (e) {
@@ -36,7 +36,7 @@ const scrapeMaxroll = async(url) => {
 					continue;
 				}
 
-				itemType = itemType.replace('Ancestral Legendary ', '');
+				itemType = itemType.replace(/(Legendary |Rare )/, '');
 
 				const obj = { itemType : itemType, affixes : [] };
 				
