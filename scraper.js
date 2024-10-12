@@ -40,7 +40,7 @@ const scrapeMaxroll = async(url) => {
 
 				const obj = { itemType : itemType, affixes : [] };
 				
-				const affixes = slot.querySelectorAll('.d4t-list-affix, .d4t-list-greater');
+				const affixes = slot.querySelectorAll('ul:last-of-type .d4t-list-affix, ul:last-of-type .d4t-list-greater');
 				for (const affix of affixes) {
 					obj.affixes.push(
 						affix.textContent

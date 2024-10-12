@@ -74,6 +74,7 @@ class Builder {
 			.toLowerCase()
 			.replace(/^ranks to/, 'to')
 			.replace(/^lucky hit chance to/i, 'lucky hit up to a chance to')
+			.replace(/ \(spiritborn only\)/, '')
 			.trim().replace(/[ ]{1,}/g, '_');
 	}
 }
