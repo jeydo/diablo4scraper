@@ -31,6 +31,9 @@ const d4builds = {
 	Sorcerer : {
 		'Offhand' : 'focus,tome',
 		'Weapon' : 'dagger,wand,staff'
+	},
+	Spiritborn : {
+		
 	}
 }
 const mobalytics = {

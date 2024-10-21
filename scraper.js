@@ -1,6 +1,12 @@
 const puppeteer = require('puppeteer')
 const itemTypeMatcher = require('./itemtype.js')
 
+function delay(time) {
+   return new Promise(function(resolve) { 
+       setTimeout(resolve, time)
+   });
+}
+
 const scrapeMaxroll = async(url) => {
 	const browser = await puppeteer.launch({
 	    headless: true
@@ -77,7 +83,10 @@ const scrapeD4builds = async(url) => {
 		affixes : [],
 		uniques : []
 	};
+
 	const slots = await page.$$('.builder__gear__items .builder__gear__item:not(.disabled)')
+	await page.$$eval('.builder__new__gems', els => els.forEach(el => el.remove()))
+	
 	for (slot of slots) {
 		const elementItemType = await slot.$('.builder__gear__slot')
 		
