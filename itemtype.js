@@ -33,7 +33,7 @@ const d4builds = {
 		'Weapon' : 'dagger,wand,staff'
 	},
 	Spiritborn : {
-		
+
 	}
 }
 const mobalytics = {
@@ -69,7 +69,8 @@ const mobalytics = {
 	Sorcerer : {
 		'Offhand' : 'focus,tome',
 		'Weapon' : 'dagger,wand,staff'
-	}
+	},
+	Spiritborn : {}
 }
 
 const matchItemType = function(itemType, charClass, matcher) {
