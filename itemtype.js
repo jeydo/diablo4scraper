@@ -7,7 +7,9 @@ const d4builds = {
 		'2h Axe' : 'two-handed axe',
 		'1h Axe' : 'axe',
 		'2h Scythe' : 'two-handed scythe',
-		'1h Scythe' : 'scythe'
+		'1h Scythe' : 'scythe',
+		'Ring 1' : 'ring',
+		'Ring 2' : 'ring'
 	},
 	Barbarian : {
 		'Bludgeoning Weapon' : 'two-handed mace',
