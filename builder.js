@@ -73,6 +73,7 @@ class Builder {
 			.replace(/[0-9,\.\[\]%+:\-]/g, '')
 			.toLowerCase()
 			.replace(/^ranks to/, 'to')
+			.replace(/ \([^ ]+ only\)/, '')
 			.replace(/^lucky hit chance to/i, 'lucky hit up to a chance to')
 			.replace(/ \(spiritborn only\)/, '')
 			.replace(/^ranks (?!of)/, 'to ')
